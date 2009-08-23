@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+  <includeClasses>
+    <classEntry path="jac.container.layout.Bounds"/>
+    <classEntry path="jac.container.layout.ChildInfo"/>
+    <classEntry path="jac.container.layout.DefaultLayout"/>
+    <classEntry path="jac.container.layout.Pad"/>
+    <classEntry path="mx.core.FlexSprite"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests>
+    <namespaceManifestEntry manifest="../manifest.xml" namespace="http://jac.jacwright.com/2009"/>
+  </namespaceManifests>
+</flexLibProperties>

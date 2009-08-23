@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<componentPackage>
+	<component id="Menu" class="jac.ui.Menu"/>
+	<component id="MenuItem" class="jac.ui.MenuItem"/>
+	<component id="Menus" class="jac.ui.Menus"/>
+	<component id="MenuSeparator" class="jac.ui.MenuSeparator"/>
+</componentPackage>

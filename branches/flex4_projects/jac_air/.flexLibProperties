@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+  <includeClasses>
+    <classEntry path="jac.db.Database"/>
+    <classEntry path="jac.filesystem.AsyncFile"/>
+    <classEntry path="jac.filesystem.FileWatcher"/>
+    <classEntry path="jac.ui.DialogWindow"/>
+    <classEntry path="jac.ui.Menu"/>
+    <classEntry path="jac.ui.MenuItem"/>
+    <classEntry path="jac.ui.MenuSeparator"/>
+    <classEntry path="jac.ui.Menus"/>
+    <classEntry path="jac.ui.ModalDialogWindow"/>
+    <classEntry path="jac.ui.Tooltip"/>
+    <classEntry path="jac.ui.WindowUtils"/>
+    <classEntry path="jac.ui.alert"/>
+    <classEntry path="jac.ui.alertLoader"/>
+    <classEntry path="jac.ui.confirm"/>
+    <classEntry path="jac.ui.prompt"/>
+    <classEntry path="jac.utils.Preferences"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests>
+    <namespaceManifestEntry manifest="../manifest.xml" namespace="http://jac.jacwright.com/2009"/>
+  </namespaceManifests>
+</flexLibProperties>

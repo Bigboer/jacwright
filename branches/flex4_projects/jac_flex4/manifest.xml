@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<componentPackage>
+	<component id="DefaultLayout" class="jac.container.layout.DefaultLayout"/>
+</componentPackage>
