@@ -39,8 +39,8 @@ package jac.image
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
-	import flight.net.IResponse;
-	import flight.net.Response;
+	import jac.net.IResponse;
+	import jac.net.Response;
 	import flight.utils.Singleton;
 	
 	public class ImageLibrary
@@ -136,7 +136,7 @@ package jac.image
 				var image:Image = images[url];
 				image.expires = expires;
 				var bitmapData:BitmapData = image.bitmapData;
-				response.addResultHandler(sizeImage, width, height, resizeStyle);
+				response.handle(sizeImage, width, height, resizeStyle);
 				response.complete(bitmapData);
 				return response;
 			}
@@ -147,10 +147,10 @@ package jac.image
 			response.addCompleteEvent(loader, Event.COMPLETE);
 			response.addCancelEvent(loader, IOErrorEvent.IO_ERROR);
 			response.addCancelEvent(loader, SecurityErrorEvent.SECURITY_ERROR);
-			response.addResultHandler(convertToLoader)
-				.addResultHandler(storeImage, url, expires)
-				.addResultHandler(sizeImage, width, height, resizeStyle)
-				.addFaultHandler(returnMissingImage, response, width, height);
+			response.handle(convertToLoader)
+				.handle(storeImage, url, expires)
+				.handle(sizeImage, width, height, resizeStyle)
+				.handleError(returnMissingImage, response, width, height);
 			return response;
 		}
 		
@@ -222,7 +222,7 @@ package jac.image
 				}
 				image = ImageUtils.snapshot(missingImageBox);
 			}
-			response.removeResultHandler(convertToLoader).removeResultHandler(storeImage).removeResultHandler(sizeImage).complete(image);
+			response.removeHandler(convertToLoader).removeHandler(storeImage).removeHandler(sizeImage).complete(image);
 		}
 	}
 }

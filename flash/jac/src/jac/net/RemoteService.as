@@ -25,9 +25,6 @@ package jac.net
 {
 	import flash.net.NetConnection;
 	
-	import flight.net.IResponse;
-	import flight.net.Response;
-	
 	/**
 	 * Flash Remoting service class. Abstracts the NetConnection and allows
 	 * calls to be made with IResponses coming back.
@@ -36,6 +33,7 @@ package jac.net
 	{
 		public var gateway:String;
 		public var source:String;
+		protected var sources:Object;
 		
 		/**
 		 * Constructor.
@@ -45,6 +43,7 @@ package jac.net
 		public function RemoteService(gateway:String = null)
 		{
 			this.gateway = gateway;
+			sources = {};
 		}
 		
 		
@@ -57,8 +56,13 @@ package jac.net
 		 */
 		public function get(name:String):RemoteService
 		{
-			var service:RemoteService = new RemoteService(gateway);
-			service.source = source ? source + "." + name : name;
+			var service:RemoteService;
+			if (name in sources) {
+				service = sources[name];
+			} else {
+				sources[name] = service = new RemoteService(gateway);
+				service.source = source ? source + "." + name : name;
+			}
 			return service;
 		}
 		
