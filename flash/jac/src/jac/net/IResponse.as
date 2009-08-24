@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package jac.net
 {
-	import flight.progress.IProgress;
 	
 	/**
 	 * An IResponse object represents a response to some action, replacing a

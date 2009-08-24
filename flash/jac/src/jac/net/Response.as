@@ -24,13 +24,9 @@
 package jac.net
 {
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.net.Responder;
-	
-	import flight.errors.ResponderError;
-	import flight.events.Dispatcher;
-	import flight.progress.IProgress;
-	import flight.progress.Progress;
 	
 	/**
 	 * An Response object represents a response to some action, replacing a
@@ -43,7 +39,7 @@ package jac.net
 	 * the case for synchronous actions) it is immediately invoked. The effect
 	 * is the same as if the handler were added before response completion.</p>
 	 */
-	public class Response extends Dispatcher implements IResponse
+	public class Response extends EventDispatcher implements IResponse
 	{
 		/**
 		 * The stored result of the response upon completion and subsequent
@@ -104,9 +100,10 @@ package jac.net
 				return;
 			}
 			
-			var oldValue:Object = _status;
 			_status = value;
-			propertyChange("status", oldValue, _status);
+			if (hasEventListener("statusChange")) {
+				dispatchEvent(new Event("statusChange"));
+			}
 		}
 		
 		/**
@@ -130,12 +127,13 @@ package jac.net
 				return;
 			}
 			
-			var oldValue:Object = _progress;
 			_progress = value;
 			if (_progress != null && _status != ResponseStatus.PROGRESS) {
 				_progress.position = _progress.length;
 			}
-			propertyChange("progress", oldValue, _progress);
+			if (hasEventListener("progressChange")) {
+				dispatchEvent(new Event("progressChange"));
+			}
 		}
 		
 		/**
