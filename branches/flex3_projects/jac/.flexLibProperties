@@ -16,9 +16,12 @@
 <classEntry path="jac.motion.easing.Linear"/>
 <classEntry path="jac.motion.easing.Power"/>
 <classEntry path="jac.motion.easing.Sine"/>
+<classEntry path="jac.net.IProgress"/>
 <classEntry path="jac.net.IResponse"/>
+<classEntry path="jac.net.Progress"/>
 <classEntry path="jac.net.RemoteProxy"/>
 <classEntry path="jac.net.RemoteService"/>
+<classEntry path="jac.net.ResponderError"/>
 <classEntry path="jac.net.Response"/>
 <classEntry path="jac.net.ResponseStatus"/>
 <classEntry path="jac.ui.Cursor"/>
