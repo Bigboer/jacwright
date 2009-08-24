@@ -4,9 +4,10 @@ package jac.filesystem
 	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 	
-	import flight.net.IResponse;
-	import flight.net.Response;
 	import flight.vo.ValueObject;
+	
+	import jac.net.IResponse;
+	import jac.net.Response;
 	
 	public class FileWatcher
 	{
@@ -39,7 +40,7 @@ package jac.filesystem
 			start = getTimer();
 			if (file.isDirectory) {
 				waitingDirectories++;
-				file.getDirectoryListing().addResultHandler(onAddListing);
+				file.getDirectoryListing().handle(onAddListing);
 			} else {
 				addFile(file);
 			}
@@ -67,7 +68,7 @@ package jac.filesystem
 			
 			if (file.isDirectory && !file.isPackage && recursive) {
 				waitingDirectories++;
-				file.getDirectoryListing().addResultHandler(onAddListing);
+				file.getDirectoryListing().handle(onAddListing);
 			}
 			
 			if (waitingDirectories == 0) {
@@ -98,7 +99,7 @@ package jac.filesystem
 			start = getTimer();
 			if (file.isDirectory) {
 				waitingDirectories++;
-				file.getDirectoryListing().addResultHandler(onCheckListing);
+				file.getDirectoryListing().handle(onCheckListing);
 			} else {
 				checkFile(file);
 			}
@@ -130,7 +131,7 @@ package jac.filesystem
 			
 			if (file.isDirectory && !file.isPackage && recursive) {
 				waitingDirectories++;
-				file.getDirectoryListing().addResultHandler(onCheckListing);
+				file.getDirectoryListing().handle(onCheckListing);
 			}
 			
 			if (waitingDirectories == 0) {
