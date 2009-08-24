@@ -24,7 +24,6 @@
 package jac.net
 {
 	import flight.progress.IProgress;
-	import flight.utils.IMerging;
 	
 	/**
 	 * An IResponse object represents a response to some action, replacing a
@@ -36,8 +35,8 @@ package jac.net
 	{
 		/**
 		 * Indication of whether the response is in progress, has been completed
-		 * or has faulted. Valid values of status are 'progress', 'result' and
-		 * 'fault' respectfully.
+		 * or has errored. Valid values of status are 'progress', 'result' and
+		 * 'error' respectfully.
 		 * 
 		 * @see		flight.net.ResponseStatus
 		 */
@@ -59,7 +58,7 @@ package jac.net
 		 * Adds a callback handler to be invoked with the successful results of
 		 * the response. Result handlers receive data and have the opportunity
 		 * to format the data for subsequent handlers. They can also trigger the
-		 * response's fault if the data is invalid by returning an Error.
+		 * response's error if the data is invalid by returning an Error.
 		 * 
 		 * <p>The method signature should describe a data object as the first
 		 * parameter. Additional parameters may be defined and provided when
@@ -67,21 +66,21 @@ package jac.net
 		 * 
 		 * <p>To format data for subsequent handlers the result handler may
 		 * return a new value in its method signature. To end the result cycle
-		 * and trigger the fault cycle an Error type should be returned.
+		 * and trigger the error cycle an Error type should be returned.
 		 * Additionally returning another IResponse type will link this response
 		 * to the other's completion. Otherwise the return type should be
 		 * <code>void</code>.</p>
 		 * 
 		 * <p>
 		 * <pre>
-		 * 	// example of a formatting handler - also showing a possible fault
+		 * 	// example of a formatting handler - also showing a possible error
 		 * 	private function onResult(data:Object):Object
 		 * 	{
 		 * 		var amf:ByteArray = data as ByteArray;
 		 * 		try {
 		 * 			data = amf.readObject();
 		 * 		} catch (error:Error) {
-		 * 			// ejects out of the result handling phase and into fault handling
+		 * 			// ejects out of the result handling phase and into error handling
 		 * 			return new Error("Invalid AMF response: " + amf.toString());
 		 * 		}
 		 * 		return data;
@@ -115,9 +114,9 @@ package jac.net
 		 * 
 		 * <p>The method signature should describe an error type as the first
 		 * parameter. Additional parameters may be defined and provided when
-		 * adding the fault handler.</p>
+		 * adding the error handler.</p>
 		 * 
-		 * <p>To cancel the fault cycle the handler may return an IResponse in
+		 * <p>To cancel the error cycle the handler may return an IResponse in
 		 * its method signature, otherwise the return type should be
 		 * <code>void</code>. Returning another IResponse type will link this
 		 * response to the other's completion.</p>
@@ -126,8 +125,8 @@ package jac.net
 		 * <pre>
 		 * 	import mx.controls.Alert;
 		 * 	
-		 * 	// example of a fault handler
-		 * 	private function onFault(error:Error):void
+		 * 	// example of a error handler
+		 * 	private function onError(error:Error):void
 		 * 	{
 		 * 		Alert.show(error.message, "Error");
 		 * 	}
@@ -145,7 +144,7 @@ package jac.net
 		function handleError(errorHandler:Function, ... errorParams):IResponse;
 		
 		/**
-		 * Removes a fault callback handler that has been previously added.
+		 * Removes a error callback handler that has been previously added.
 		 * 
 		 * @param	handler			The handler method to remove.
 		 * 
@@ -163,9 +162,9 @@ package jac.net
 		function complete(data:Object):void;
 		
 		/**
-		 * Cancels the response with an error, triggering the fault cycle.
+		 * Cancels the response with an error, triggering the error cycle.
 		 * 
-		 * @param	error			The faulting error.
+		 * @param	error			The error.
 		 */
 		function cancel(error:Error):void;
 		
