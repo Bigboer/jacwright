@@ -88,8 +88,8 @@ package jac.net
 		
 		/**
 		 * Indication of whether the response is in progress, has been completed
-		 * or has faulted. Valid values of status are 'progress', 'result' and
-		 * 'fault' respectfully.
+		 * or has errored. Valid values of status are 'progress', 'result' and
+		 * 'error' respectfully.
 		 * 
 		 * @see		flight.net.ResponseStatus
 		 */
@@ -142,7 +142,7 @@ package jac.net
 		 * Adds a callback handler to be invoked with the successful results of
 		 * the response. Result handlers receive data and have the opportunity
 		 * to format the data for subsequent handlers. They can also trigger the
-		 * response's fault if the data is invalid by returning an Error.
+		 * response's error if the data is invalid by returning an Error.
 		 * 
 		 * <p>The method signature should describe a data object as the first
 		 * parameter. Additional parameters may be defined and provided when
@@ -150,21 +150,21 @@ package jac.net
 		 * 
 		 * <p>To format data for subsequent handlers the result handler may
 		 * return a new value in its method signature. To end the result cycle
-		 * and trigger the fault cycle an Error type should be returned.
+		 * and trigger the error cycle an Error type should be returned.
 		 * Additionally returning another IResponse type will link this response
 		 * to the other's completion. Otherwise the return type should be
 		 * <code>void</code>.</p>
 		 * 
 		 * <p>
 		 * <pre>
-		 * 	// example of a formatting handler - also showing a possible fault
+		 * 	// example of a formatting handler - also showing a possible error
 		 * 	private function onResult(data:Object):Object
 		 * 	{
 		 * 		var amf:ByteArray = data as ByteArray;
 		 * 		try {
 		 * 			data = amf.readObject();
 		 * 		} catch (error:Error) {
-		 * 			// ejects out of the result handling phase and into fault handling
+		 * 			// ejects out of the result handling phase and into error handling
 		 * 			return new Error("Invalid AMF response: " + amf.toString());
 		 * 		}
 		 * 		return data;
@@ -218,9 +218,9 @@ package jac.net
 		 * 
 		 * <p>The method signature should describe an error type as the first
 		 * parameter. Additional parameters may be defined and provided when
-		 * adding the fault handler.</p>
+		 * adding the error handler.</p>
 		 * 
-		 * <p>To cancel the fault cycle the handler may return an IResponse in
+		 * <p>To cancel the error cycle the handler may return an IResponse in
 		 * its method signature, otherwise the return type should be
 		 * <code>void</code>. Returning another IResponse type will link this
 		 * response to the other's completion.</p>
@@ -229,8 +229,8 @@ package jac.net
 		 * <pre>
 		 * 	import mx.controls.Alert;
 		 * 	
-		 * 	// example of a fault handler
-		 * 	private function onFault(error:Error):void
+		 * 	// example of a error handler
+		 * 	private function onError(error:Error):void
 		 * 	{
 		 * 		Alert.show(error.message, "Error");
 		 * 	}
@@ -256,8 +256,8 @@ package jac.net
 		}
 		
 		/**
-		 * Removes a fault callback handler that has been previously added. If
-		 * the same handler has been added more than once, removeFaultHandler()
+		 * Removes a error callback handler that has been previously added. If
+		 * the same handler has been added more than once, removeErrorHandler()
 		 * will only remove the latest instance of the handler.
 		 * 
 		 * @param	handler			The handler method to remove.
@@ -333,12 +333,12 @@ package jac.net
 		 * @return					A reference to this instance of Response,
 		 * 							useful for method chaining.
 		 */
-		public function addCancelEvent(target:IEventDispatcher, eventType:String, faultProperty:String = "text"):Response
+		public function addCancelEvent(target:IEventDispatcher, eventType:String, errorProperty:String = "text"):Response
 		{
 			if (errorEvents == null) {
 				errorEvents = [];
 			}
-			errorEvents.push( [target, eventType, faultProperty] );
+			errorEvents.push( [target, eventType, errorProperty] );
 			target.addEventListener(eventType, onCancel);
 			return this;
 		}
@@ -363,9 +363,9 @@ package jac.net
 		}
 		
 		/**
-		 * Cancels the response with an error, triggering the fault cycle.
+		 * Cancels the response with an error, triggering the error cycle.
 		 * 
-		 * @param	error			The faulting error.
+		 * @param	error			The error.
 		 */
 		public function cancel(error:Error):void
 		{
@@ -393,7 +393,7 @@ package jac.net
 		}
 		
 		/**
-		 * Handles the fault coming from a responder and turns it into an error
+		 * Handles the error coming from a responder and turns it into an error
 		 * object.
 		 */
 		protected function handleResponderError(data:Object):void
@@ -402,7 +402,7 @@ package jac.net
 		}
 		
 		/**
-		 * Runs the appropriate result or fault cycle, invoking each handler and
+		 * Runs the appropriate result or error cycle, invoking each handler and
 		 * tracking data formatting.
 		 */
 		protected function runHandlers():void
@@ -438,7 +438,7 @@ package jac.net
 							handlers = errorHandlers;
 						}
 						
-						// if the return type is not void or IResponse then replace 'result' or 'fault'
+						// if the return type is not void or IResponse then replace 'result' or 'error'
 						this[_status] = formatted;
 					}
 				}
