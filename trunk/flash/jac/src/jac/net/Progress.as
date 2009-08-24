@@ -23,16 +23,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 package jac.net
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.events.ProgressEvent;
-	
-	import flight.events.Dispatcher;
-	import flight.events.PropertyEvent;
 	
 	/**
 	 * Data object representing a progression of any type.
 	 */
-	public class Progress extends Dispatcher implements IProgress
+	public class Progress extends EventDispatcher implements IProgress
 	{
 		private var loader:IEventDispatcher;
 		private var _type:String = "";
@@ -71,9 +70,10 @@ package jac.net
 				return;
 			}
 			
-			var oldValue:Object = _type;
 			_type = value;
-			propertyChange("type", oldValue, _type);
+			if (hasEventListener("typeChange")) {
+				dispatchEvent(new Event("typeChange"));
+			}
 		}
 		
 		/**
@@ -92,11 +92,15 @@ package jac.net
 				return;
 			}
 			
-			var oldValues:Array = [_position, _percent];
 			_position = value;
 			_percent = _position / _length;
 			
-			PropertyEvent.dispatchChangeList(this, ["position", "percent"], oldValues);
+			if (hasEventListener("positionChange")) {
+				dispatchEvent(new Event("positionChange"));
+			}
+			if (hasEventListener("percentChange")) {
+				dispatchEvent(new Event("percentChange"));
+			}
 		}
 		
 		/**
@@ -115,11 +119,15 @@ package jac.net
 				return;
 			}
 			
-			var oldValues:Array = [_percent, _position];
 			_percent = value;
 			_position = _percent * _length;
 			
-			PropertyEvent.dispatchChangeList(this, ["percent", "position"], oldValues);
+			if (hasEventListener("percentChange")) {
+				dispatchEvent(new Event("percentChange"));
+			}
+			if (hasEventListener("positionChange")) {
+				dispatchEvent(new Event("positionChange"));
+			}
 		}
 		
 		/**
@@ -137,14 +145,15 @@ package jac.net
 				return;
 			}
 			
-			var oldValue:Object = _length;
 			_length = value;
 			if (_position > _length) {
 				position = _length;
 			} else if (_position > 0) {
 				percent = _position / _length;
 			}
-			propertyChange("length", oldValue, _length);
+			if (hasEventListener("lengthChange")) {
+				dispatchEvent(new Event("lengthChange"));
+			}
 		}
 		
 		/**

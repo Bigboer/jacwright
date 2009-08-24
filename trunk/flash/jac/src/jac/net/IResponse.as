@@ -37,7 +37,7 @@ package jac.net
 		 * or has errored. Valid values of status are 'progress', 'result' and
 		 * 'error' respectfully.
 		 * 
-		 * @see		flight.net.ResponseStatus
+		 * @see		jac.net.ResponseStatus
 		 */
 		[Bindable(event="statusChange")]
 		function get status():String;
@@ -47,7 +47,7 @@ package jac.net
 		 * The progress of the response completion. Valuable when measuring
 		 * asynchronous progression.
 		 * 
-		 * @see		flight.progress.IProgress
+		 * @see		jac.progress.IProgress
 		 */
 		[Bindable(event="progressChange")]
 		function get progress():IProgress;
