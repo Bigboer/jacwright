@@ -28,7 +28,7 @@ package jac.image
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	
-	import flight.net.IResponse;
+	import jac.net.IResponse;
 	
 	import mx.core.UIComponent;
 
@@ -127,7 +127,7 @@ package jac.image
 			maxBitmapWidth = getExplicitOrMeasuredWidth();
 			maxBitmapHeight = getExplicitOrMeasuredHeight();
 			if (_url) {
-				response = ImageLibrary.getInstance().getImage(_url, maxBitmapWidth, maxBitmapHeight, _resizeStyle).addResultHandler(onBitmapData);
+				response = ImageLibrary.getInstance().getImage(_url, maxBitmapWidth, maxBitmapHeight, _resizeStyle).handle(onBitmapData);
 			} else if (_source && bitmap) {
 				bitmap.bitmapData = ImageUtils.resizeImage(_source, maxBitmapWidth, maxBitmapHeight, _resizeStyle);
 			} else if (bitmap) {

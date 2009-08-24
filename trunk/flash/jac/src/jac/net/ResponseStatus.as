@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2009 Jacob Wright
+// Copyright (c) 2009 Jacob Wright, Tyler Wright
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +21,29 @@
 // THE SOFTWARE.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package jac.motion
+
+package jac.net
 {
-	import flash.utils.Dictionary;
-	
-	import jac.net.IResponse;
-	
-	
-	public class Motion
+	/**
+	 * The ResponseStatus class provides constant values to use for the
+	 * <code>IResponse.status</code> property. 
+	 */
+	public class ResponseStatus
 	{
-		protected static var tweens:Dictionary = new Dictionary();
+		/**
+		 * Specifies that the response is currently in-progress and has not yet
+		 * resolved.
+		 */
+		public static const PROGRESS:String = "progress";
 		
+		/**
+		 * Specifies that the response has resolved successfully.
+		 */
+		public static const RESULT:String = "result";
 		
-		public function Motion()
-		{
-		}
-		
-		
-		
-		public static function createTween(target:Object, params:Object):IResponse
-		{
-			var tween:Tween = new Tween(target, params);
-			tweens[tween] = true;
-			return tween.start().handle(onTweenComplete);
-		}
-		
-		protected static function onTweenComplete(tween:Tween):void
-		{
-			delete tweens[tween];
-		}
+		/**
+		 * Specifies that their was an error during the response.
+		 */
+		public static const ERROR:String = "error";
 	}
 }

@@ -38,6 +38,7 @@ package jac.net
 	{
 		public var gateway:String;
 		public var source:String;
+		protected var sources:Object;
 		
 		/**
 		 * Constructor.
@@ -58,8 +59,14 @@ package jac.net
 		 */
 		flash_proxy override function getProperty(name:*):* 
 		{
-			var service:RemoteProxy = new RemoteProxy(gateway);
-			service.source = source ? source + "." + name : name;
+			name = name.toString();
+			var service:RemoteProxy;
+			if (name in sources) {
+				service = sources[name];
+			} else {
+				sources[name] = service = new RemoteProxy(gateway);
+				service.source = source ? source + "." + name : name;
+			}
 			return service;
 		}
 		
@@ -73,23 +80,15 @@ package jac.net
 		 * last two parameters are functions the second to the last will be the
 		 * function called on a result and the last will be called on a fault.
 		 */
-		flash_proxy override function callProperty(name:*, ...rest):* 
+		flash_proxy override function callProperty(method:*, ...params):* 
 		{
-			var result:Function;
-			var fault:Function;
-			
-			if(rest[rest.length - 1] is Function && rest[rest.length - 2] is Function)
-				fault = rest.pop();
-			
-			if(rest[rest.length - 1] is Function)
-				result = rest.pop();
-			
-			var responder:Responder = new Responder(result, fault);
-			var command:String = source ? source + "." + name : name;
-			var params:Array = [command, responder].concat(rest);
+			var response:Response = new Response();
+			var command:String = source ? source + "." + method : method;
+			params = [command, response.createResponder()].concat(params);
 			var conn:NetConnection = new NetConnection();
 			conn.connect(gateway);
 			conn.call.apply(null, params);
+			return response;
 		}
 	}
 }

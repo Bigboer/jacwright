@@ -8,7 +8,7 @@
 <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/framework.swc" useDefaultLinkType="false"/>
 </modifiedEntries>
 </libraryPathEntry>
-<libraryPathEntry kind="3" linkType="1" path="/flight-framework/bin/flight-framework.swc" useDefaultLinkType="false"/>
+<libraryPathEntry kind="1" linkType="1" path="libs"/>
 </libraryPath>
 <sourceAttachmentPath/>
 </compiler>
