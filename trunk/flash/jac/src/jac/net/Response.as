@@ -347,7 +347,7 @@ package jac.net
 		 * 
 		 * @param	data			The resulting data.
 		 */
-		public function complete(data:Object):IResponse
+		public function complete(data:Object):void
 		{
 			result = data;
 			
@@ -358,7 +358,6 @@ package jac.net
 			
 			release();
 			runHandlers();
-			return this;
 		}
 		
 		/**
@@ -366,7 +365,7 @@ package jac.net
 		 * 
 		 * @param	error			The error.
 		 */
-		public function cancel(error:Error):IResponse
+		public function cancel(error:Error):void
 		{
 			error = error;
 			
@@ -377,7 +376,6 @@ package jac.net
 			
 			release();
 			runHandlers();
-			return this;
 		}
 		
 		/**

@@ -158,14 +158,14 @@ package jac.net
 		 * 
 		 * @param	data			The resulting data.
 		 */
-		function complete(data:Object):IResponse;
+		function complete(data:Object):void;
 		
 		/**
 		 * Cancels the response with an error, triggering the error cycle.
 		 * 
 		 * @param	error			The error.
 		 */
-		function cancel(error:Error):IResponse;
+		function cancel(error:Error):void;
 		
 	}
 }
