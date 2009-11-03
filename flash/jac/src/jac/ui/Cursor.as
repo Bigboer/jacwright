@@ -30,6 +30,7 @@ package jac.ui
 	import flash.events.MouseEvent;
 	import flash.ui.Mouse;
 	import flash.utils.Dictionary;
+	import flash.utils.getQualifiedClassName;
 	
 	import flight.utils.Singleton;
 
@@ -128,7 +129,7 @@ package jac.ui
 		}
 		
 		
-		public static function useCursor(interactiveObject:InteractiveObject, cursor:String):void
+		public static function useCursor(interactiveObject:InteractiveObject, cursor:Object):void
 		{
 			Cursor.getInstance().useCursor(interactiveObject, cursor);
 		}
@@ -155,7 +156,7 @@ package jac.ui
 		}
 		
 		
-		public function useCursor(interactiveObject:InteractiveObject, cursor:String):void
+		public function useCursor(interactiveObject:InteractiveObject, cursor:Object):void
 		{
 			if (cursor == AUTO) {
 				delete objects[interactiveObject];
@@ -249,18 +250,34 @@ package jac.ui
 		 */
 		private function addCursor(interactiveObject:InteractiveObject):void
 		{
-			var cursor:String = objects[interactiveObject];
+			var cursor:Object = objects[interactiveObject];
 			
 			if (cursor == AUTO) {
 				Mouse.show();
 				if ("cursor" in Mouse) {
 					Mouse["cursor"] = AUTO;
 				}
-			} else if (cursor in cursors) {
+				return;
+			}
+			
+			if (cursor in cursors) {
+				cursor = cursors[cursor];
+			} else if (cursor is Class || cursor is DisplayObject) {
+				var name:String = getQualifiedClassName(cursor);
+				if (name in cursors) {
+					cursor = cursors[name];
+				} else {
+					if (cursor is Class) {
+						cursor = new cursor();
+					}
+					cursors[name] = cursor;
+				}
+			}
+			
+			if (cursor is DisplayObject) {
 				Mouse.hide();
-				var display:DisplayObject = cursors[cursor];
-				interactiveObject.stage.addChild(display);
-				currentCursor = display;
+				interactiveObject.stage.addChild(cursor as DisplayObject);
+				currentCursor = cursor as DisplayObject;
 				interactiveObject.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				interactiveObject.stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave);
 			} else if ("cursor" in Mouse) {
@@ -277,7 +294,11 @@ package jac.ui
 		 */
 		private function removeCursor(interactiveObject:InteractiveObject):void
 		{
-			var cursor:String = objects[interactiveObject];
+			var cursor:Object = objects[interactiveObject];
+			
+			if (cursor is Class || cursor is DisplayObject) {
+				cursor = getQualifiedClassName(cursor);
+			}
 			
 			// custom cursor type
 			if (cursor in cursors) {
