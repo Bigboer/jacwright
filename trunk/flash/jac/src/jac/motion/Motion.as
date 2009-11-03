@@ -43,7 +43,7 @@ package jac.motion
 		{
 			var tween:Tween = new Tween(target, params);
 			tweens[tween] = true;
-			return tween.start().handle(onTweenComplete);
+			return tween.start().onComplete(onTweenComplete);
 		}
 		
 		protected static function onTweenComplete(tween:Tween):void

@@ -40,7 +40,7 @@ package jac.filesystem
 			start = getTimer();
 			if (file.isDirectory) {
 				waitingDirectories++;
-				file.getDirectoryListing().handle(onAddListing);
+				file.getDirectoryListing().onComplete(onAddListing);
 			} else {
 				addFile(file);
 			}
@@ -68,7 +68,7 @@ package jac.filesystem
 			
 			if (file.isDirectory && !file.isPackage && recursive) {
 				waitingDirectories++;
-				file.getDirectoryListing().handle(onAddListing);
+				file.getDirectoryListing().onComplete(onAddListing);
 			}
 			
 			if (waitingDirectories == 0) {
@@ -99,7 +99,7 @@ package jac.filesystem
 			start = getTimer();
 			if (file.isDirectory) {
 				waitingDirectories++;
-				file.getDirectoryListing().handle(onCheckListing);
+				file.getDirectoryListing().onComplete(onCheckListing);
 			} else {
 				checkFile(file);
 			}
@@ -131,7 +131,7 @@ package jac.filesystem
 			
 			if (file.isDirectory && !file.isPackage && recursive) {
 				waitingDirectories++;
-				file.getDirectoryListing().handle(onCheckListing);
+				file.getDirectoryListing().onComplete(onCheckListing);
 			}
 			
 			if (waitingDirectories == 0) {
