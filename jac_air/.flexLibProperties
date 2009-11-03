@@ -18,5 +18,7 @@
 <classEntry path="jac.ui.prompt"/>
 </includeClasses>
 <includeResources/>
-<namespaceManifests/>
+<namespaceManifests>
+<namespaceManifestEntry manifest="manifest.xml" namespace="http://jac.jacwright.com/2009"/>
+</namespaceManifests>
 </flexLibProperties>
