@@ -178,7 +178,7 @@ package jac.net
 		 * @return					A reference to this instance of IResponse,
 		 * 							useful for method chaining.
 		 */
-		public function handle(resultHandler:Function, ... resultParams):IResponse
+		public function onComplete(resultHandler:Function, ... resultParams):IResponse
 		{
 			resultParams.unshift(resultHandler);
 			resultHandlers.push(resultParams);
@@ -198,7 +198,7 @@ package jac.net
 		 * @return					A reference to this instance of IResponse,
 		 * 							useful for method chaining.
 		 */
-		public function removeHandler(resultHandler:Function):IResponse
+		public function removeOnComplete(resultHandler:Function):IResponse
 		{
 			var i:uint = resultHandlers.length;
 			while (i--) {
@@ -243,7 +243,7 @@ package jac.net
 		 * @return					A reference to this instance of IResponse,
 		 * 							useful for method chaining.
 		 */
-		public function handleError(errorHandler:Function, ... errorParams):IResponse
+		public function onError(errorHandler:Function, ... errorParams):IResponse
 		{
 			errorParams.unshift(errorHandler);
 			errorHandlers.push(errorParams);
@@ -263,7 +263,7 @@ package jac.net
 		 * @return					A reference to this instance of IResponse,
 		 * 							useful for method chaining.
 		 */
-		public function removeErrorHandler(errorHandler:Function):IResponse
+		public function removeOnError(errorHandler:Function):IResponse
 		{
 			var i:uint = errorHandlers.length;
 			while (i--) {
@@ -303,7 +303,7 @@ package jac.net
 				resultEvents = [];
 			}
 			resultEvents.push( [target, eventType, resultProperty] );
-			target.addEventListener(eventType, onComplete);
+			target.addEventListener(eventType, onCompleteHandler);
 			return this;
 		}
 		
@@ -337,7 +337,7 @@ package jac.net
 				errorEvents = [];
 			}
 			errorEvents.push( [target, eventType, errorProperty] );
-			target.addEventListener(eventType, onCancel);
+			target.addEventListener(eventType, onCancelHandler);
 			return this;
 		}
 		
@@ -347,7 +347,7 @@ package jac.net
 		 * 
 		 * @param	data			The resulting data.
 		 */
-		public function complete(data:Object):void
+		public function complete(data:Object):IResponse
 		{
 			result = data;
 			
@@ -358,6 +358,7 @@ package jac.net
 			
 			release();
 			runHandlers();
+			return this;
 		}
 		
 		/**
@@ -365,7 +366,7 @@ package jac.net
 		 * 
 		 * @param	error			The error.
 		 */
-		public function cancel(error:Error):void
+		public function cancel(error:Error):IResponse
 		{
 			error = error;
 			
@@ -376,6 +377,7 @@ package jac.net
 			
 			release();
 			runHandlers();
+			return this;
 		}
 		
 		/**
@@ -426,8 +428,8 @@ package jac.net
 						var response:IResponse = formatted as IResponse;
 						progress = response.progress;
 						status = response.status;
-						response.handle(complete);
-						response.handleError(cancel);
+						response.onComplete(complete);
+						response.onError(cancel);
 						return;
 					} else {
 						if (formatted is Error && _status == ResponseStatus.RESULT) {
@@ -456,20 +458,20 @@ package jac.net
 			for each (args in resultEvents) {
 				target = args[0];
 				eventType = args[1];
-				target.removeEventListener(eventType, onComplete);
+				target.removeEventListener(eventType, onCompleteHandler);
 			}
 			
 			for each (args in errorEvents) {
 				target = args[0];
 				eventType = args[1];
-				target.removeEventListener(eventType, onCancel);
+				target.removeEventListener(eventType, onCancelHandler);
 			}
 		}
 		
 		/**
 		 * Catches complete events and retrieves the appropriate data.
 		 */
-		private function onComplete(event:Event):void
+		private function onCompleteHandler(event:Event):void
 		{
 			var info:Array = getEventInfo(event, resultEvents);
 			var prop:String = info[2];
@@ -483,7 +485,7 @@ package jac.net
 		/**
 		 * Catches cancel events and retrieves the appropriate error.
 		 */
-		private function onCancel(event:Event):void
+		private function onCancelHandler(event:Event):void
 		{
 			var info:Array = getEventInfo(event, errorEvents);
 			var prop:String = info[2];

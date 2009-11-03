@@ -127,7 +127,7 @@ package jac.image
 			maxBitmapWidth = getExplicitOrMeasuredWidth();
 			maxBitmapHeight = getExplicitOrMeasuredHeight();
 			if (_url) {
-				response = ImageLibrary.getInstance().getImage(_url, maxBitmapWidth, maxBitmapHeight, _resizeStyle).handle(onBitmapData);
+				response = ImageLibrary.getInstance().getImage(_url, maxBitmapWidth, maxBitmapHeight, _resizeStyle).onComplete(onBitmapData);
 			} else if (_source && bitmap) {
 				bitmap.bitmapData = ImageUtils.resizeImage(_source, maxBitmapWidth, maxBitmapHeight, _resizeStyle);
 			} else if (bitmap) {

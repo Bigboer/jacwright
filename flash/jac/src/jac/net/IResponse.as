@@ -95,7 +95,7 @@ package jac.net
 		 * @return					A reference to this instance of IResponse,
 		 * 							useful for method chaining.
 		 */
-		function handle(resultHandler:Function, ... resultParams):IResponse;
+		function onComplete(resultHandler:Function, ... resultParams):IResponse;
 		
 		/**
 		 * Removes a result callback handler that has been previously added.
@@ -105,7 +105,7 @@ package jac.net
 		 * @return					A reference to this instance of IResponse,
 		 * 							useful for method chaining.
 		 */
-		function removeHandler(resultHandler:Function):IResponse;
+		function removeOnComplete(resultHandler:Function):IResponse;
 		
 		/**
 		 * Adds a callback handler to be invoked with the failure of the
@@ -140,7 +140,7 @@ package jac.net
 		 * @return					A reference to this instance of IResponse,
 		 * 							useful for method chaining.
 		 */
-		function handleError(errorHandler:Function, ... errorParams):IResponse;
+		function onError(errorHandler:Function, ... errorParams):IResponse;
 		
 		/**
 		 * Removes a error callback handler that has been previously added.
@@ -150,7 +150,7 @@ package jac.net
 		 * @return					A reference to this instance of IResponse,
 		 * 							useful for method chaining.
 		 */
-		function removeErrorHandler(errorHandler:Function):IResponse;
+		function removeOnError(errorHandler:Function):IResponse;
 		 
 		/**
 		 * Completes the response with the specified data, triggering the result
@@ -158,14 +158,14 @@ package jac.net
 		 * 
 		 * @param	data			The resulting data.
 		 */
-		function complete(data:Object):void;
+		function complete(data:Object):IResponse;
 		
 		/**
 		 * Cancels the response with an error, triggering the error cycle.
 		 * 
 		 * @param	error			The error.
 		 */
-		function cancel(error:Error):void;
+		function cancel(error:Error):IResponse;
 		
 	}
 }

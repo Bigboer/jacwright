@@ -136,7 +136,7 @@ package jac.image
 				var image:Image = images[url];
 				image.expires = expires;
 				var bitmapData:BitmapData = image.bitmapData;
-				response.handle(sizeImage, width, height, resizeStyle);
+				response.onComplete(sizeImage, width, height, resizeStyle);
 				response.complete(bitmapData);
 				return response;
 			}
@@ -147,10 +147,10 @@ package jac.image
 			response.addCompleteEvent(loader, Event.COMPLETE);
 			response.addCancelEvent(loader, IOErrorEvent.IO_ERROR);
 			response.addCancelEvent(loader, SecurityErrorEvent.SECURITY_ERROR);
-			response.handle(convertToLoader)
-				.handle(storeImage, url, expires)
-				.handle(sizeImage, width, height, resizeStyle)
-				.handleError(returnMissingImage, response, width, height);
+			response.onComplete(convertToLoader)
+				.onComplete(storeImage, url, expires)
+				.onComplete(sizeImage, width, height, resizeStyle)
+				.onError(returnMissingImage, response, width, height);
 			return response;
 		}
 		
@@ -222,7 +222,7 @@ package jac.image
 				}
 				image = ImageUtils.snapshot(missingImageBox);
 			}
-			response.removeHandler(convertToLoader).removeHandler(storeImage).removeHandler(sizeImage).complete(image);
+			response.removeOnComplete(convertToLoader).removeOnComplete(storeImage).removeOnComplete(sizeImage).complete(image);
 		}
 	}
 }

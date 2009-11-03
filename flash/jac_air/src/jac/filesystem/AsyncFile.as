@@ -199,7 +199,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(file, Event.SELECT)
 				.addCancelEvent(file, Event.CANCEL)
-				.handle(toAsyncFile);
+				.onComplete(toAsyncFile);
 		}
 		
 		public function browseForDirectory(title:String):IResponse
@@ -208,7 +208,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(file, Event.SELECT)
 				.addCancelEvent(file, Event.CANCEL)
-				.handle(toAsyncFile);
+				.onComplete(toAsyncFile);
 		}
 		
 		public function browseForOpen(title:String, typeFilter:Array = null):IResponse
@@ -217,7 +217,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(file, Event.SELECT)
 				.addCancelEvent(file, Event.CANCEL)
-				.handle(toAsyncFile);
+				.onComplete(toAsyncFile);
 		}
 		
 		public function browseForOpenMultiple(title:String, typeFilter:Array = null):IResponse
@@ -226,7 +226,7 @@ package jac.filesystem
 			var response:Response = new Response();
 			response.addCompleteEvent(file, FileListEvent.SELECT_MULTIPLE, "files");
 			response.addCancelEvent(file, Event.CANCEL);
-			return response.handle(toFileList);
+			return response.onComplete(toFileList);
 		}
 		
 		public function browseForSave(title:String):IResponse
@@ -235,7 +235,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(file, Event.SELECT)
 				.addCancelEvent(file, Event.CANCEL)
-				.handle(toAsyncFile);
+				.onComplete(toAsyncFile);
 		}
 		
 		public function cancel():void
@@ -260,7 +260,7 @@ package jac.filesystem
 			response.addCompleteEvent(_file, Event.COMPLETE);
 			response.addCancelEvent(_file, SecurityErrorEvent.SECURITY_ERROR);
 			response.addCancelEvent(_file, IOErrorEvent.IO_ERROR);
-			return response.handle(toAsyncFile);
+			return response.onComplete(toAsyncFile);
 		}
 		
 		public function createDirectory():void
@@ -275,7 +275,7 @@ package jac.filesystem
 			response.addCompleteEvent(_file, Event.COMPLETE);
 			response.addCancelEvent(_file, SecurityErrorEvent.SECURITY_ERROR);
 			response.addCancelEvent(_file, IOErrorEvent.IO_ERROR);
-			return response.handle(toAsyncFile);
+			return response.onComplete(toAsyncFile);
 		}
 		
 		public function deleteFile():IResponse
@@ -285,7 +285,7 @@ package jac.filesystem
 			response.addCompleteEvent(_file, Event.COMPLETE);
 			response.addCancelEvent(_file, SecurityErrorEvent.SECURITY_ERROR);
 			response.addCancelEvent(_file, IOErrorEvent.IO_ERROR);
-			return response.handle(toAsyncFile);
+			return response.onComplete(toAsyncFile);
 		}
 		// TODO make sure this is right
 		public function download(request:URLRequest, defaultFileName:String = null):IResponse
@@ -295,7 +295,7 @@ package jac.filesystem
 			response.addCompleteEvent(_file, Event.COMPLETE);
 			response.addCancelEvent(_file, SecurityErrorEvent.SECURITY_ERROR);
 			response.addCancelEvent(_file, IOErrorEvent.IO_ERROR);
-			return response.handle(toAsyncFile);
+			return response.onComplete(toAsyncFile);
 		}
 		
 		public function getDirectoryListing():IResponse
@@ -305,7 +305,7 @@ package jac.filesystem
 			var response:Response = new Response();
 			response.addCompleteEvent(file, FileListEvent.DIRECTORY_LISTING, "files");
 			response.addCancelEvent(file, IOErrorEvent.IO_ERROR);
-			return response.handle(toFileList);
+			return response.onComplete(toFileList);
 		}
 		
 		public function getRelativePath(ref:AsyncFile, useDotDot:Boolean = false):String
@@ -325,7 +325,7 @@ package jac.filesystem
 			response.addCompleteEvent(_file, Event.COMPLETE);
 			response.addCancelEvent(_file, SecurityErrorEvent.SECURITY_ERROR);
 			response.addCancelEvent(_file, IOErrorEvent.IO_ERROR);
-			return response.handle(toAsyncFile);
+			return response.onComplete(toAsyncFile);
 		}
 		
 		public function moveToTrash():IResponse
@@ -335,7 +335,7 @@ package jac.filesystem
 			response.addCompleteEvent(_file, Event.COMPLETE);
 			response.addCancelEvent(_file, SecurityErrorEvent.SECURITY_ERROR);
 			response.addCancelEvent(_file, IOErrorEvent.IO_ERROR);
-			return response.handle(toAsyncFile);
+			return response.onComplete(toAsyncFile);
 		}
 		
 		public function resolvePath(path:String):AsyncFile
@@ -360,7 +360,7 @@ package jac.filesystem
 			response.addCompleteEvent(_file, Event.COMPLETE);
 			response.addCancelEvent(_file, SecurityErrorEvent.SECURITY_ERROR);
 			response.addCancelEvent(_file, IOErrorEvent.IO_ERROR);
-			return response.handle(toAsyncFile);
+			return response.onComplete(toAsyncFile);
 		}
 		// TODO make sure this is right
 		public function uploadUnencoded(request:URLRequest):IResponse
@@ -370,7 +370,7 @@ package jac.filesystem
 			response.addCompleteEvent(_file, Event.COMPLETE);
 			response.addCancelEvent(_file, SecurityErrorEvent.SECURITY_ERROR);
 			response.addCancelEvent(_file, IOErrorEvent.IO_ERROR);
-			return response.handle(toAsyncFile);
+			return response.onComplete(toAsyncFile);
 		}
 		
 		
@@ -384,7 +384,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(stream, Event.COMPLETE)
 				.addCancelEvent(stream, IOErrorEvent.IO_ERROR)
-				.handle(toAsyncFile);
+				.onComplete(toAsyncFile);
 		}
 		
 		public function close():IResponse
@@ -393,7 +393,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(stream, Event.CLOSE)
 				.addCancelEvent(stream, IOErrorEvent.IO_ERROR)
-				.handle(toAsyncFile);
+				.onComplete(toAsyncFile);
 		}
 		
 		public function read():IResponse
@@ -403,7 +403,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(stream, Event.COMPLETE)
 				.addCancelEvent(stream, IOErrorEvent.IO_ERROR)
-				.handle(toByteArray);
+				.onComplete(toByteArray);
 		}
 		
 		public function write(byteArray:ByteArray):IResponse
@@ -415,7 +415,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(stream, Event.CLOSE)
 				.addCancelEvent(stream, IOErrorEvent.IO_ERROR)
-				.handle(toThis);
+				.onComplete(toThis);
 		}
 		
 		public function readText():IResponse
@@ -425,7 +425,7 @@ package jac.filesystem
 			return new Response()
 				.addCompleteEvent(stream, Event.COMPLETE)
 				.addCancelEvent(stream, IOErrorEvent.IO_ERROR)
-				.handle(toText);
+				.onComplete(toText);
 		}
 		
 		public function writeText(text:String):IResponse

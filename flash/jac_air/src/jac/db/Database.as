@@ -68,7 +68,7 @@ package jac.db
 		public function analyze(resourceName:String = null):IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.analyze, resourceName, response.createResponder(), response);
 		}
@@ -76,7 +76,7 @@ package jac.db
 		public function attach(name:String, reference:Object = null, encryptionKey:ByteArray = null):IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.attach, name, reference, response.createResponder(), encryptionKey, response);
 		}
@@ -84,7 +84,7 @@ package jac.db
 		public function begin(transactionLockType:String = null):IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.begin, transactionLockType, response.createResponder(), response);
 		}
@@ -92,7 +92,7 @@ package jac.db
 		public function cancel():IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.cancel, response.createResponder(), response);
 		}
@@ -100,7 +100,7 @@ package jac.db
 		public function close():IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.close, response.createResponder(), response);
 		}
@@ -108,7 +108,7 @@ package jac.db
 		public function commit():IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.commit, response.createResponder(), response);
 		}
@@ -116,7 +116,7 @@ package jac.db
 		public function compact():IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.compact, response.createResponder(), response);
 		}
@@ -124,7 +124,7 @@ package jac.db
 		public function deanalyze():IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.deanalyze, response.createResponder(), response);
 		}
@@ -132,7 +132,7 @@ package jac.db
 		public function detach(name:String):IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.detach, name, response.createResponder(), response);
 		}
@@ -140,7 +140,7 @@ package jac.db
 		public function loadSchema(type:Class = null, name:String = null, database:String = "main", includeColumnSchema:Boolean = true):IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase).handle(toSchema);
+			response.onComplete(toDatabase).onComplete(toSchema);
 			
 			return run(connection.loadSchema, type, name, database, includeColumnSchema, response.createResponder(), response);
 		}
@@ -148,7 +148,7 @@ package jac.db
 		public function open(reference:File = null, openMode:String = "create", autoCompact:Boolean = false, pageSize:int = 1024, encryptionKey:ByteArray = null):IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			_file = reference;
 			_conn = new SQLConnection();
@@ -161,7 +161,7 @@ package jac.db
 		public function reencrypt(newEncryptionKey:ByteArray):IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.reencrypt, newEncryptionKey, response.createResponder(), response);
 		}
@@ -169,7 +169,7 @@ package jac.db
 		public function rollback():IResponse
 		{
 			var response:Response = new Response();
-			response.handle(toDatabase);
+			response.onComplete(toDatabase);
 			
 			return run(connection.rollback, response.createResponder(), response);
 		}
@@ -196,7 +196,7 @@ package jac.db
 			var response:IResponse = new Response()
 				.addCompleteEvent(stmt, SQLEvent.RESULT)
 				.addCancelEvent(stmt, SQLErrorEvent.ERROR)
-				.handle(onQueryComplete);
+				.onComplete(onQueryComplete);
 			
 			return run(stmt.execute, response);
 		}
@@ -269,14 +269,14 @@ package jac.db
 				_conn = data.connection;
 				_file = data.file;
 				if (!_conn.connected) {
-					new Response().addCompleteEvent(_conn, SQLEvent.OPEN).handle(onOpen);
+					new Response().addCompleteEvent(_conn, SQLEvent.OPEN).onComplete(onOpen);
 				}
 			} else {
 				if (_connectionName) {
 					var file:File = File.applicationStorageDirectory.resolvePath(_connectionName + ".db");
 				}
 				
-				open(file).handle(onOpen);
+				open(file).onComplete(onOpen);
 			}
 		}
 		
