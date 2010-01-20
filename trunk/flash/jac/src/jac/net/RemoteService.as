@@ -25,6 +25,9 @@ package jac.net
 {
 	import flash.net.NetConnection;
 	
+	import flight.net.IResponse;
+	import flight.net.Response;
+	
 	/**
 	 * Flash Remoting service class. Abstracts the NetConnection and allows
 	 * calls to be made with IResponses coming back.

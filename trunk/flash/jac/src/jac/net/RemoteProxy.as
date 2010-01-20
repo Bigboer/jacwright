@@ -24,9 +24,10 @@
 package jac.net
 {
 	import flash.net.NetConnection;
-	import flash.net.Responder;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
+	
+	import flight.net.Response;
 	
 	use namespace flash_proxy;
 	
