@@ -1,41 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
-<includeClasses>
-<classEntry path="jac.motion.easing.EaseInOutBase"/>
-<classEntry path="jac.motion.easing.Power"/>
-<classEntry path="jac.ui.DefaultCursors"/>
-<classEntry path="jac.utils.Color"/>
-<classEntry path="jac.utils.JSON"/>
-<classEntry path="jac.utils.Strings"/>
-<classEntry path="jac.net.RestService"/>
-<classEntry path="jac.net.RemoteProxy"/>
-<classEntry path="jac.geom.Angle"/>
-<classEntry path="jac.image.ImageUtils"/>
-<classEntry path="jac.net.IProgress"/>
-<classEntry path="jac.motion.easing.Sine"/>
-<classEntry path="jac.net.RemoteService"/>
-<classEntry path="jac.ui.Cursor"/>
-<classEntry path="jac.net.IResponse"/>
-<classEntry path="jac.net.ContentType"/>
-<classEntry path="jac.image.ImageLibrary"/>
-<classEntry path="jac.net.ResponderError"/>
-<classEntry path="jac.utils.Preferences"/>
-<classEntry path="jac.net.Response"/>
-<classEntry path="jac.image.ResizeStyle"/>
-<classEntry path="jac.ui.UseCursor"/>
-<classEntry path="jac.motion.Tween"/>
-<classEntry path="jac.motion.easing.IEaser"/>
-<classEntry path="jac.motion.easing.Linear"/>
-<classEntry path="jac.net.Progress"/>
-<classEntry path="jac.net.ResponseStatus"/>
-<classEntry path="jac.motion.Easing"/>
-<classEntry path="jac.image.ImageThumb"/>
-<classEntry path="jac.geom.TransformMatrix"/>
-<classEntry path="jac.motion.Motion"/>
-<classEntry path="jac.motion.easing.EasingFraction"/>
-</includeClasses>
-<includeResources/>
-<namespaceManifests>
-<namespaceManifestEntry manifest="manifest.xml" namespace="http://jac.jacwright.com/2009"/>
-</namespaceManifests>
+  <includeClasses>
+    <classEntry path="jac.geom.Angle"/>
+    <classEntry path="jac.geom.TransformMatrix"/>
+    <classEntry path="jac.image.ImageLibrary"/>
+    <classEntry path="jac.image.ImageThumb"/>
+    <classEntry path="jac.image.ImageUtils"/>
+    <classEntry path="jac.image.ResizeStyle"/>
+    <classEntry path="jac.motion.Easing"/>
+    <classEntry path="jac.motion.Motion"/>
+    <classEntry path="jac.motion.Tween"/>
+    <classEntry path="jac.motion.easing.EaseInOutBase"/>
+    <classEntry path="jac.motion.easing.EasingFraction"/>
+    <classEntry path="jac.motion.easing.IEaser"/>
+    <classEntry path="jac.motion.easing.Linear"/>
+    <classEntry path="jac.motion.easing.Power"/>
+    <classEntry path="jac.motion.easing.Sine"/>
+    <classEntry path="jac.net.RemoteProxy"/>
+    <classEntry path="jac.net.RemoteService"/>
+    <classEntry path="jac.net.RestService"/>
+    <classEntry path="jac.net.rest.IRestFormat"/>
+    <classEntry path="jac.net.rest.JSONFormat"/>
+    <classEntry path="jac.ui.Cursor"/>
+    <classEntry path="jac.ui.DefaultCursors"/>
+    <classEntry path="jac.ui.UseCursor"/>
+    <classEntry path="jac.utils.Color"/>
+    <classEntry path="jac.utils.JSON"/>
+    <classEntry path="jac.utils.Preferences"/>
+    <classEntry path="jac.utils.Strings"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests>
+    <namespaceManifestEntry manifest="manifest.xml" namespace="http://jac.jacwright.com/2009"/>
+  </namespaceManifests>
 </flexLibProperties>
