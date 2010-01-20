@@ -100,7 +100,6 @@ package jac.net
 			request.data = data;
 			request.contentType = format.getContentType();
 			request.requestHeaders.push(new URLRequestHeader("Accept", format.getContentType()));
-			request.requestHeaders.push(new URLRequestHeader("X-HTTP-Method-Override", method));
 			
 			if (Capabilities.playerType != "Desktop" && method == "PUT" || method == "DELETE") {
 				request.method = "POST";
