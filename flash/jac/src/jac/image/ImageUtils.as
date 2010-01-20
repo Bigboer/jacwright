@@ -90,7 +90,7 @@ package jac.image
 		 */
 		public static function resizeImage(source:BitmapData, width:uint, height:uint, resizeStyle:String = "constrainProportions"):BitmapData
 		{
-			var bitmapData:BitmapData = source;
+			var bitmapData:BitmapData;
 			var crop:Boolean = false;
 			var fill:Boolean = false;
 			var constrain:Boolean = false;
@@ -120,8 +120,8 @@ package jac.image
 				else scaleY = scaleX;
 			}
 			
-			var originalWidth:uint = bitmapData.width;
-			var originalHeight:uint = bitmapData.height;
+			var originalWidth:uint = source.width;
+			var originalHeight:uint = source.height;
 			var originalX:int = 0;
 			var originalY:int = 0;
 			var finalWidth:uint = Math.round(source.width*scaleX);
@@ -144,7 +144,6 @@ package jac.image
 					throw error;
 				}
 				bitmapData.draw(source, new Matrix(scaleX, 0, 0, scaleY, originalX*scaleX, originalY*scaleY), null, null, null, true);
-				source.dispose();
 				return bitmapData;
 			}
 			
@@ -157,10 +156,8 @@ package jac.image
 			if (scaleX < IDEAL_RESIZE_PERCENT) nextScaleX *= IDEAL_RESIZE_PERCENT;
 			if (scaleY < IDEAL_RESIZE_PERCENT) nextScaleY *= IDEAL_RESIZE_PERCENT;
 			
-			var temp:BitmapData = new BitmapData(Math.round(originalWidth*nextScaleX), Math.round(originalHeight*nextScaleY), true, 0);
-			temp.draw(bitmapData, new Matrix(nextScaleX, 0, 0, nextScaleY, originalX*nextScaleX, originalY*nextScaleY), null, null, null, true);
-			bitmapData.dispose();
-			bitmapData = temp;
+			bitmapData = new BitmapData(Math.round(originalWidth*nextScaleX), Math.round(originalHeight*nextScaleY), true, 0);
+			bitmapData.draw(source, new Matrix(nextScaleX, 0, 0, nextScaleY, originalX*nextScaleX, originalY*nextScaleY), null, null, null, true);
 			
 			nextScaleX *= IDEAL_RESIZE_PERCENT;
 			nextScaleY *= IDEAL_RESIZE_PERCENT;
@@ -168,7 +165,7 @@ package jac.image
 			while (nextScaleX >= scaleX || nextScaleY >= scaleY) {
 				var actualScaleX:Number = nextScaleX >= scaleX ? IDEAL_RESIZE_PERCENT : 1;
 				var actualScaleY:Number = nextScaleY >= scaleY ? IDEAL_RESIZE_PERCENT : 1;
-				temp = new BitmapData(Math.round(bitmapData.width*actualScaleX), Math.round(bitmapData.height*actualScaleY), true, 0);
+				var temp:BitmapData = new BitmapData(Math.round(bitmapData.width*actualScaleX), Math.round(bitmapData.height*actualScaleY), true, 0);
 				temp.draw(bitmapData, new Matrix(actualScaleX, 0, 0, actualScaleY), null, null, null, true);
 				bitmapData.dispose();
 				nextScaleX *= IDEAL_RESIZE_PERCENT;
