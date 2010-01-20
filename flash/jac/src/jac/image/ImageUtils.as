@@ -144,6 +144,7 @@ package jac.image
 					throw error;
 				}
 				bitmapData.draw(source, new Matrix(scaleX, 0, 0, scaleY, originalX*scaleX, originalY*scaleY), null, null, null, true);
+				source.dispose();
 				return bitmapData;
 			}
 			
@@ -158,6 +159,7 @@ package jac.image
 			
 			var temp:BitmapData = new BitmapData(Math.round(originalWidth*nextScaleX), Math.round(originalHeight*nextScaleY), true, 0);
 			temp.draw(bitmapData, new Matrix(nextScaleX, 0, 0, nextScaleY, originalX*nextScaleX, originalY*nextScaleY), null, null, null, true);
+			bitmapData.dispose();
 			bitmapData = temp;
 			
 			nextScaleX *= IDEAL_RESIZE_PERCENT;

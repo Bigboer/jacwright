@@ -28,8 +28,8 @@ package jac.motion
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
-	import jac.net.IResponse;
-	import jac.net.Response;
+	import flight.net.IResponse;
+	import flight.net.Response;
 	
 	import jac.motion.easing.IEaser;
 	
