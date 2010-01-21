@@ -24,7 +24,7 @@ package jac.net.rest
 		
 		public function decode(data:String):Object
 		{
-			return JSON.decode(data);
+			return data ? JSON.decode(data) : null;
 		}
 		
 	}
