@@ -45,8 +45,11 @@ package jac.image
 	
 	public class ImageLibrary
 	{
+		public var provideMissingImage:Boolean = true;
+		
 		[Embed(source="jac/assets/missingImage.png")]
 		protected var missingImageClass:Class;
+		protected var missingImage:BitmapData;
 		protected var missingImageBox:Sprite;
 		protected var expires:uint;
 		protected var timer:Timer;
@@ -71,10 +74,10 @@ package jac.image
 		 */
 		public function ImageLibrary()
 		{
-			var missingImage:Bitmap = new missingImageClass();
-			images.missingImage = missingImage.bitmapData;
+			var missingImageBitmap:Bitmap = new missingImageClass();
+			missingImage = missingImageBitmap.bitmapData;
 			missingImageBox = new Sprite();
-			missingImageBox.addChild(missingImage);
+			missingImageBox.addChild(missingImageBitmap);
 			timer = new Timer(15000);
 			timer.addEventListener(TimerEvent.TIMER, onTimer);
 		}
@@ -149,8 +152,8 @@ package jac.image
 			response.addCancelEvent(loader, SecurityErrorEvent.SECURITY_ERROR);
 			response.addResultHandler(convertToLoader)
 				.addResultHandler(storeImage, url, expires)
-				.addResultHandler(sizeImage, width, height, resizeStyle)
-				.addFaultHandler(returnMissingImage, response, width, height);
+				.addResultHandler(sizeImage, width, height, resizeStyle);
+			if (provideMissingImage) response.addFaultHandler(returnMissingImage, response, width, height);
 			return response;
 		}
 		
@@ -209,7 +212,7 @@ package jac.image
 		 */
 		protected function returnMissingImage(error:Error, response:Response, width:uint, height:uint):void
 		{
-			var image:BitmapData = images.missingImage;
+			var image:BitmapData = missingImage;
 			if (width && height) {
 				if (missingImageBox.width != width || missingImageBox.height != height) {
 					missingImageBox.graphics.clear();

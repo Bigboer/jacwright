@@ -26,27 +26,54 @@ package jac.net
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.external.ExternalInterface;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestHeader;
 	import flash.net.URLStream;
 	import flash.net.URLVariables;
 	import flash.system.Capabilities;
 	
+	import flight.errors.ResponseError;
 	import flight.net.IResponse;
 	import flight.net.Response;
 	import flight.progress.Progress;
 	
 	import jac.net.rest.IRestFormat;
+	import jac.net.rest.RestError;
+	import jac.utils.JSON;
 	
 	public class RestService
 	{
 		public var _baseUrl:String;
 		public var format:IRestFormat;
+		protected var calls:Object = {};
+		protected var callNumber:uint = 0;
+		
+		/**
+		 * The mode in which this service should run. When in the browser and if
+		 * javascript is allowed, we will use ajax to perform true REST calls
+		 * and provide greater operability with services. When on the desktop
+		 * don't include the workarounds that the browser must use.
+		 */
+		protected var mode:Namespace;
+		protected namespace AJAX = "ajax";
+		protected namespace DESKTOP = "desktop";
+		protected namespace CRIPPLED = "crippled";
+		
 		
 		public function RestService(format:IRestFormat, baseUrl:String = "")
 		{
 			this.baseUrl = baseUrl;
 			this.format = format;
+			
+			if (Capabilities.playerType == "Desktop") {
+				mode = DESKTOP;
+			} else if (ExternalInterface.available && ExternalInterface.objectID && call("'jQuery' in window")) {
+				mode = AJAX;
+				ExternalInterface.addCallback("ajaxREST", ajaxResponse);
+			} else {
+				mode = CRIPPLED;
+			}
 		}
 		
 		public function get baseUrl():String
@@ -101,11 +128,32 @@ package jac.net
 			request.contentType = format.getContentType();
 			request.requestHeaders.push(new URLRequestHeader("Accept", format.getContentType()));
 			
-			if (Capabilities.playerType != "Desktop" && method == "PUT" || method == "DELETE") {
-				request.method = "POST";
-				request.requestHeaders.push(new URLRequestHeader("X-HTTP-Method-Override", method));
-			}
+			return mode::send(request).addFaultHandler(checkError);
+		}
+		
+		
+		AJAX function send(request:URLRequest):Response
+		{
+			var settings:Object = {
+				type: request.method,
+				url: request.url,
+				data: request.data,
+				complete: "completeFunction",
+				contentType: request.contentType
+			};
 			
+			var settingsText:String = JSON.encode(settings);
+			settingsText = settingsText.replace('"completeFunction"', "function(xhr, status) {document.getElementById('" + ExternalInterface.objectID + "').ajaxREST('call" + callNumber + "', status, xhr.responseText);}");
+			call("jQuery.ajax(" + settingsText + ")");
+			
+			var response:Response = new Response();
+			response.addResultHandler(format.decode).addFaultHandler(decodeError);
+			calls["call" + callNumber++] = response;
+			return response;
+		}
+		
+		DESKTOP function send(request:URLRequest):Response
+		{
 			var response:Response = new Response();
 			
 			var stream:URLStream = new URLStream();
@@ -119,6 +167,53 @@ package jac.net
 			
 			return response;
 		}
+		
+		CRIPPLED function send(request:URLRequest):Response
+		{
+			if (request.method == "PUT" || request.method == "DELETE") {
+				request.requestHeaders.push(new URLRequestHeader("X-HTTP-Method-Override", request.method));
+				request.method = "POST";
+			}
+			
+			return DESKTOP::send(request);
+		}
+		
+		protected function ajaxResponse(call:String, status:String, data:String):void
+		{
+			var response:Response = calls[call];
+			if (!response) return;
+			
+			if (status == "success") {
+				response.complete(data);
+			} else {
+				response.cancel(new RestError(data));
+			}
+		}
+		
+		protected function checkError(data:Object):void
+		{
+			if ("error" in data && "message" in data.error) {
+				throw new ResponseError(new RestError(data.error.message));
+			}
+		}
+		
+		protected function decodeError(error:Error):void
+		{
+			if (error is RestError) {
+				try {
+					var obj:Object = format.decode(error.message);
+					if ("error" in obj && "message" in obj.error) {
+						error.message = obj.error.message;
+					}
+				} catch(e:Error){}
+			}
+		}
+		
+		protected function call(...js:Array):*
+		{
+			return ExternalInterface.call("eval", js.join(""));
+		}
+		
 		
 		protected function getParams(params:Object):URLVariables
 		{

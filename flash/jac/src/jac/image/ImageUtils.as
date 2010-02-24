@@ -112,6 +112,19 @@ package jac.image
 			// Find the scale to reach the final size
 			var scaleX:Number = width/source.width;
 			var scaleY:Number = height/source.height;
+			
+			if (width == 0 && height == 0) {
+				scaleX = scaleY = 1;
+				width = source.width;
+				height = source.height;
+			} else if (width == 0) {
+				scaleX = scaleY;
+				width = scaleX * source.width;
+			} else if (height == 0) {
+				scaleY = scaleX;
+				height = scaleY * source.height;
+			}
+			
 			if (crop) {
 				if (scaleX < scaleY) scaleX = scaleY;
 				else scaleY = scaleX;
