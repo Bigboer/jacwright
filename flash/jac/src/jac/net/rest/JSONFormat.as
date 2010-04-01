@@ -12,9 +12,9 @@ package jac.net.rest
 			return "application/json";
 		}
 		
-		public function modifyURLVariables(vars:URLVariables):void
+		public function getUrlContentType():String
 		{
-			vars.format = "json";
+			return "json";
 		}
 		
 		public function encode(data:Object):String

@@ -6,7 +6,7 @@ package jac.net.rest
 	{
 		function getContentType():String;
 		
-		function modifyURLVariables(vars:URLVariables):void;
+		function getUrlContentType():String;
 		
 		function encode(data:Object):String;
 		

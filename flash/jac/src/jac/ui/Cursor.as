@@ -234,7 +234,7 @@ package jac.ui
 		 */
 		private function hideObjectCursor(interactiveObject:InteractiveObject):void
 		{
-			while (stack.length && stack.pop().object != interactiveObject);
+			while (stack.length && stack.pop().object != interactiveObject){}
 			
 			if (interactiveObject) {
 				removeCursor(interactiveObject);
